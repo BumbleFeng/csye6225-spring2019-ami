@@ -5,7 +5,7 @@
 | Name | NEU ID | Email Address |
 | --- | --- | --- |
 | Feng Huang | 001230993 | huang.fe@husky.neu.edu |
-| | | |
+| Meng Tan | 001856443 | tan.men@husky.neu.edu |
 | | | |
 | | | |
 
