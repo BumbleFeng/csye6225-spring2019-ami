@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | Feng Huang | 001230993 | huang.fe@husky.neu.edu |
 | Meng Tan | 001856443 | tan.men@husky.neu.edu |
-| | | |
+| Zixuan Yu | 001263991 | yu.zix@husky.neu.edu |
 | | | |
 
 ## Validate Template
