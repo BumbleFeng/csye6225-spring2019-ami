@@ -34,13 +34,11 @@
             "type": "shell",
             "inline": [
                 "sudo yum update -y",
-                "sudo yum install tomcat tomcat-webapps tomcat-admin-webapps tomcat-docs-webapp tomcat-javadoc -y",
+                "sudo yum install tomcat tomcat-webapps tomcat-admin-webapps tomcat-docs-webapp tomcat-javadoc wget ruby -y",
                 "sudo systemctl enable tomcat",
-                "sudo yum install wget",
                 "wget http://dev.mysql.com/get/mysql80-community-release-el7-2.noarch.rpm",
                 "sudo rpm -Uvh mysql80-community-release-el7-2.noarch.rpm",
                 "sudo yum install mysql-community-server -y",
-                "sudo yum install ruby",
                 "sudo yum clean all"
             ],
             "pause_before": "30s"
