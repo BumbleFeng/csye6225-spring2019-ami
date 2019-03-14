@@ -1,49 +1,56 @@
 {
-    "variables": {
-        "aws_access_key": "",
-        "aws_secret_key": "",
-        "aws_region": "",
-        "subnet_id": "",
-        "source_ami": "ami-9887c6e7",
-        "ssh_username":"centos"
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "aws_region": "",
+    "subnet_id": "",
+    "source_ami": "ami-9887c6e7",
+    "ssh_username": "centos"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "{{user `aws_region`}}",
+      "instance_type": "t2.micro",
+      "subnet_id": "{{user `subnet_id`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ami_name": "csye6225_{{timestamp}}",
+      "ami_description": "CentOS AMI for CSYE 6225 - Spring 2019",
+      "launch_block_device_mappings": [
+        {
+          "device_name": "/dev/sda1",
+          "volume_size": 8,
+          "volume_type": "gp2",
+          "delete_on_termination": true
+        }
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "webapi.txt",
+      "destination": "~/"
     },
-    "builders": [
-        {
-            "type": "amazon-ebs",
-            "access_key": "{{user `aws_access_key`}}",
-            "secret_key": "{{user `aws_secret_key`}}",
-            "region": "{{user `aws_region`}}",
-            "instance_type": "t2.micro",
-            "subnet_id": "{{user `subnet_id`}}",
-            "source_ami": "{{user `source_ami`}}",
-            "ssh_username": "{{user `ssh_username`}}",
-            "ami_name": "csye6225_{{timestamp}}",
-            "ami_description": "CentOS AMI for CSYE 6225 - Spring 2019",
-            "launch_block_device_mappings": [
-                {
-                    "device_name": "/dev/sda1",
-                    "volume_size": 20,
-                    "volume_type": "gp2",
-                    "delete_on_termination": true
-                }
-            ]
-        }
-    ],
-    "provisioners": [
-        {
-            "type": "shell",
-            "inline": [
-                "sudo yum update -y",
-                "sudo yum install tomcat tomcat-webapps tomcat-admin-webapps tomcat-docs-webapp tomcat-javadoc -y",
-                "sudo systemctl enable tomcat",
-                "sudo yum install wget",
-                "wget http://dev.mysql.com/get/mysql80-community-release-el7-2.noarch.rpm",
-                "sudo rpm -Uvh mysql80-community-release-el7-2.noarch.rpm",
-                "sudo yum install mysql-community-server -y",
-                "sudo yum install ruby",
-                "sudo yum clean all"
-            ],
-            "pause_before": "30s"
-        }
-    ]
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum update -y",
+        "sudo yum install java-1.8.0-openjdk wget zip unzip ruby -y",
+        "wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install",
+        "chmod +x ./install",
+        "sudo ./install auto",
+        "sudo mkdir -p /var/webapi/config",
+        "sudo touch /var/webapi/config/application.properties",
+        "sudo useradd -r webapi -s /bin/false",
+        "sudo chown -R webapi:webapi /var/webapi",
+        "sudo mv webapi.txt /etc/systemd/system/webapi.service",
+        "sudo yum clean all"
+      ],
+      "pause_before": "30s"
+    }
+  ]
 }
