@@ -36,11 +36,17 @@
       "destination": "~/"
     },
     {
+      "type": "file",
+      "source": "config.js",
+      "destination": "~/"
+    },
+    {
       "type": "shell",
       "inline": [
         "sudo yum update -y",
-        "sudo yum install java-1.8.0-openjdk wget zip unzip ruby -y",
-        "wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install",
+        "sudo yum install epel-release -y",
+        "sudo yum install java-1.8.0-openjdk wget zip unzip ruby nodejs git -y",
+        "wget -q https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install",
         "chmod +x ./install",
         "sudo ./install auto",
         "sudo mkdir -p /var/webapi/config",
@@ -48,6 +54,15 @@
         "sudo useradd -r webapi -s /bin/false",
         "sudo chown -R webapi:webapi /var/webapi",
         "sudo mv webapi.txt /etc/systemd/system/webapi.service",
+        "sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm",
+        "wget -q https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-cloudwatch-agent.rpm",
+        "sudo rpm -U ./amazon-cloudwatch-agent.rpm",
+        "sudo git clone https://github.com/etsy/statsd.git /opt/statsd",
+        "sudo mv config.js /opt/statsd",
+        "sudo npm install -g forever",
+        "sudo npm install -g forever-service",
+        "sudo forever-service install statsd -s /opt/statsd/stats.js -o \" config.js\"",
+        "sudo service statsd start",
         "sudo yum clean all"
       ],
       "pause_before": "30s"
